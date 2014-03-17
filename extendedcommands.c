@@ -1244,6 +1244,9 @@ void format_sdcard(const char* volume) {
                             "ext4",
                             "ext3",
                             "ext2",
+#ifdef USE_F2FS
+                            "f2fs",
+#endif
                             NULL };
 
     int ret = -1;
@@ -1279,6 +1282,11 @@ void format_sdcard(const char* volume) {
             } else if (strcmp(list[chosen_item], "ext4") == 0) {
                 ret = make_ext4fs(v->blk_device, v->length, volume, sehandle);
             }
+#ifdef USE_F2FS
+            } else if (strcmp(list[chosen_item], "f2fs") == 0) {
+                sprintf(cmd, "/sbin/mkfs.f2fs %s", v->blk_device);
+                ret = __system(cmd);
+#endif
             break;
         }
         case 5:
